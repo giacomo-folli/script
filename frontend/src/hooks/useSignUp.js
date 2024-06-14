@@ -13,7 +13,7 @@ const useSignUp = () => {
     confirmPassword,
     gender,
   }) => {
-    const success = handleInputError({
+    const success = handleInputErrors({
       fullName,
       username,
       password,
@@ -26,9 +26,7 @@ const useSignUp = () => {
     try {
       const res = await fetch("/api/auth/signup", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           fullName,
           username,
@@ -39,17 +37,11 @@ const useSignUp = () => {
       });
 
       const data = await res.json();
-
       if (data.error) {
         throw new Error(data.error);
       }
-
-      // localStorage
       localStorage.setItem("chat-user", JSON.stringify(data));
-      // context
-      setAuthUser(data)
-      
-      console.log(data);
+      setAuthUser(data);
     } catch (error) {
       toast.error(error.message);
     } finally {
@@ -62,21 +54,20 @@ const useSignUp = () => {
 
 export default useSignUp;
 
-function handleInputError({
+function handleInputErrors({
   fullName,
   username,
   password,
   confirmPassword,
   gender,
 }) {
-  console.log({ fullName, username, password, confirmPassword, gender });
   if (!fullName || !username || !password || !confirmPassword || !gender) {
-    toast.error("Please fill in all the fields");
+    toast.error("Please fill in all fields");
     return false;
   }
 
   if (password !== confirmPassword) {
-    toast.error("Passwords don't match!");
+    toast.error("Passwords do not match");
     return false;
   }
 

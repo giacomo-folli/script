@@ -1,5 +1,5 @@
-import Sidebar from "../../components/sidebar/Sidebar";
 import ChatContainer from "../../components/messages/ChatContainer";
+import Sidebar from "../../components/sidebar/Sidebar";
 
 const Home = () => {
   return (

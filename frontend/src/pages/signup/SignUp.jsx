@@ -74,7 +74,7 @@ const SignUp = () => {
             <input
               type="password"
               placeholder="Enter a password"
-              className="input input-bordered w-full h-10"
+              className="w-full input input-bordered h-10"
               value={inputs.password}
               onChange={(e) =>
                 setInputs({ ...inputs, password: e.target.value })
@@ -90,8 +90,8 @@ const SignUp = () => {
             </label>
             <input
               type="password"
-              placeholder="Confirm a password"
-              className="input input-bordered w-full h-10"
+              placeholder="Confirm Password"
+              className="w-full input input-bordered h-10"
               value={inputs.confirmPassword}
               onChange={(e) =>
                 setInputs({ ...inputs, confirmPassword: e.target.value })
@@ -105,8 +105,9 @@ const SignUp = () => {
           />
 
           <Link
-            to="/login"
+            to={"/login"}
             className="text-gray-200 text-sm hover:underline hover:text-blue-600 mt-2 inline-block"
+            href="#"
           >
             Already have an account?
           </Link>

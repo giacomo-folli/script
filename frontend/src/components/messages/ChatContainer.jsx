@@ -1,8 +1,8 @@
+import { useEffect } from "react";
 import Chat from "./Chat";
+import useConversation from "../../store/useCoversation";
 import ChatInput from "./ChatInput";
 import { TiMessages } from "react-icons/ti";
-import useConversation from "../../store/useCoversation";
-import { useEffect } from "react";
 import { useAuthContext } from "../../context/AuthContext";
 const ChatContainer = () => {
   const { selected, setSelected } = useConversation();

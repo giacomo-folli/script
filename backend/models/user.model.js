@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const userSchema = mongoose.Schema(
+const userSchema = new mongoose.Schema(
   {
     fullName: {
       type: String,
@@ -14,7 +14,7 @@ const userSchema = mongoose.Schema(
     password: {
       type: String,
       required: true,
-      minLenght: 6,
+      minlength: 6,
     },
     gender: {
       type: String,
@@ -25,6 +25,7 @@ const userSchema = mongoose.Schema(
       type: String,
       default: "",
     },
+    // createdAt, updatedAt => Member since <createdAt>
   },
   { timestamps: true }
 );

@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import useLogin from "../../hooks/useLogin";
 
-function Login() {
+const Login = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const { loading, login } = useLogin();
@@ -17,7 +17,7 @@ function Login() {
       <div className="w-full p-6 rounded-lg shadow-md bg-black bg-clip-padding backdrop-filter backdrop-blur-lg bg-opacity-30">
         <h1 className="text-3xl font-semibold text-center">
           Login
-          <span className="text-blue-500"> Chat App </span>
+          <span className="text-blue-500"> ChatApp</span>
         </h1>
 
         <form onSubmit={handleSubmit} className="text-gray-800">
@@ -74,6 +74,6 @@ function Login() {
       </div>
     </div>
   );
-}
+};
 
 export default Login;

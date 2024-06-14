@@ -1,6 +1,6 @@
 import { useAuthContext } from "../../context/AuthContext";
-import useConversation from "../../store/useCoversation";
 import { extractTime } from "../../utils/extractTime";
+import useConversation from "../../store/useCoversation";
 
 const Message = ({ message }) => {
   const { authUser } = useAuthContext();
@@ -17,7 +17,6 @@ const Message = ({ message }) => {
           <img src={profilePic} alt="user avatar" />
         </div>
       </div>
-
       <div className={`chat-bubble text-white ${bubbleBgColor} pb-2`}>
         {message.message}
       </div>

@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const messageSchema = mongoose.Schema(
+const messageSchema = new mongoose.Schema(
   {
     senderId: {
       type: mongoose.Schema.Types.ObjectId,
@@ -16,6 +16,7 @@ const messageSchema = mongoose.Schema(
       type: String,
       required: true,
     },
+    // createdAt, updatedAt
   },
   { timestamps: true }
 );
