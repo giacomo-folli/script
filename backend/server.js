@@ -3,10 +3,9 @@ import dotenv from "dotenv";
 import userRoutes from "./routes/user.routes.js";
 import authRoutes from "./routes/auth.routes.js";
 import messageRoutes from "./routes/message.routes.js";
-import connectToDb from "./db/connect.js";
 import cookieParser from "cookie-parser";
-
-const app = express();
+import connectToDb from "./db/connect.js";
+import { app, server } from "./socket/socket.js";
 
 dotenv.config();
 
@@ -24,7 +23,7 @@ app.use("/api/messages", messageRoutes);
 //   res.send("Hello world!");
 // });
 
-app.listen(PORT, () => {
+server.listen(PORT, () => {
   // connect to mongodb
   connectToDb();
 
