@@ -25,6 +25,13 @@ const userSchema = new mongoose.Schema(
       type: String,
       default: "",
     },
+    contacts: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        required: false,
+        ref: "User",
+      },
+    ],
     // createdAt, updatedAt => Member since <createdAt>
   },
   { timestamps: true }

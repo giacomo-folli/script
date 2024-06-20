@@ -1,11 +1,18 @@
 import { useSocketContext } from "../../context/SocketContext";
+import { useAuthContext } from "../../context/AuthContext";
 import useConversation from "../../store/useCoversation";
 
 const Conversation = ({ conversation, emoji, lastIdx }) => {
   const { selected, setSelected } = useConversation();
   const isSelected = selected?._id === conversation._id;
   const { onlineUsers } = useSocketContext();
+  const { authUser } = useAuthContext();
+
   const isOnline = onlineUsers.includes(conversation._id);
+
+  let receiver = conversation.participants.filter(
+    (user) => user._id !== authUser._id
+  )[0];
 
   return (
     <>
@@ -17,13 +24,13 @@ const Conversation = ({ conversation, emoji, lastIdx }) => {
       >
         <div className={`avatar ${isOnline ? " online" : ""}`}>
           <div className="w-12 rounded-full">
-            <img src={conversation.profilePic} alt="user avatar" />
+            <img src={receiver.profilePic} alt="user avatar" />
           </div>
         </div>
 
         <div className="flex flex-col flex-1">
           <div className="flex gap-3 justify-between">
-            <p className="font-bold text-gray-200">{conversation.fullName}</p>
+            <p className="font-bold text-gray-200">{receiver.fullName}</p>
             <span className="text-xl">{emoji}</span>
           </div>
         </div>

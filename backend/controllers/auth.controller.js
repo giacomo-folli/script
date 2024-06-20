@@ -30,6 +30,7 @@ export const signup = async (req, res) => {
       password: hash,
       gender,
       profilePic: gender === "male" ? boyProfilePic : girlProfilePic,
+      contacts: [],
     });
 
     if (newUser) {
@@ -41,6 +42,7 @@ export const signup = async (req, res) => {
         _id: newUser._id,
         fullName: newUser.fullName,
         username: newUser.username,
+        contacts: newUser.contacts,
         profilePic: newUser.profilePic,
       });
     } else {
@@ -71,6 +73,7 @@ export const login = async (req, res) => {
       _id: user._id,
       fullName: user.fullName,
       username: user.username,
+      contacts: user.contacts,
       profilePic: user.profilePic,
     });
   } catch (error) {

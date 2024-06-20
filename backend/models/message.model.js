@@ -7,14 +7,14 @@ const messageSchema = new mongoose.Schema(
       ref: "User",
       required: true,
     },
-    receiverId: {
+    chatId: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
-      required: true,
+      ref: "Chat",
+      required: false,
     },
     message: {
       type: String,
-      required: true,
+      required: false,
     },
     // createdAt, updatedAt
   },
