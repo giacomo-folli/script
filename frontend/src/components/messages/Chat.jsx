@@ -6,7 +6,7 @@ import useListenMessages from "../../hooks/useListenMessages";
 
 const Chat = () => {
   const { messages, loading } = useGetMessages();
-  useListenMessages()
+  useListenMessages();
   const lastMessageRef = useRef();
 
   useEffect(() => {

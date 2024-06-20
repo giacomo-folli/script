@@ -9,6 +9,7 @@ import { useAuthContext } from "./context/AuthContext";
 function App() {
   const { authUser } = useAuthContext();
   return (
+    // .bg-gradient class to add moving gradients in bg
     <div className="p-4 h-screen flex items-center justify-center bg-gradient">
       <Routes>
         <Route

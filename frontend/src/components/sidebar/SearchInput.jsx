@@ -81,7 +81,7 @@ const UsersDialog = ({ users, loggedInUser }) => {
 
   return (
     <div className="p-2 bg-white bg-opacity-5 rounded-lg mt-4">
-      {!!users?.length &&
+      {newUsers?.length ? (
         newUsers.map((user) => (
           <div
             key={user._id}
@@ -102,7 +102,12 @@ const UsersDialog = ({ users, loggedInUser }) => {
           </div>
 
           // {(idx !== users.length) && <div className="divider my-0 py-0 h-1" />}
-        ))}
+        ))
+      ) : (
+        <>
+          <div className="w-full text-center opacity-70">No new users!</div>
+        </>
+      )}
     </div>
   );
 };
