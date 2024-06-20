@@ -74,15 +74,8 @@ const UsersDialog = ({ users, loggedInUser }) => {
   const { addContact } = useAddContact();
 
   let newUsers = [];
-  console.log(
-    users,
-    loggedInUser
-  );
   for (let us of users) {
-    if (
-      !!loggedInUser.contacts &&
-      !loggedInUser.contacts.includes(us._id)
-    )
+    if (!!loggedInUser.contacts && !loggedInUser.contacts.includes(us._id))
       newUsers.push(us);
   }
 

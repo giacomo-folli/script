@@ -28,14 +28,16 @@ export const createMessage = async (req, res) => {
     chat.messages.push(newMessage._id);
     await chat.save();
 
-    // const receiverSocketId = getReceiverSocketId(receiverId);
-    // if (receiverSocketId) {
-    //   io.to(receiverSocketId).emit("newMessage", newMessage);
-    // }
+    for (let users of chat.participants) {
+      let receiverSocketId = getReceiverSocketId(users._id);
+      if (receiverSocketId) {
+        io.to(receiverSocketId).emit("newMessage", newMessage);
+      }
+    }
 
     res.status(201).json(newMessage);
   } catch (error) {
-    console.log("Error in sendMessage Controller:", error.message);
+    console.log("Error in createMessage Controller:", error.message);
     res.status(500).json({ error: "internal server error" });
   }
 };

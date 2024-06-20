@@ -37,7 +37,7 @@ export const listUserChats = async (req, res) => {
 
     res.status(200).json(chats);
   } catch (error) {
-    console.log(" :", error.message);
+    console.log("Error in listUserChats :", error.message);
     res.status(500).json({ error: "internal server error" });
   }
 };
