@@ -1,5 +1,4 @@
 import useGetChats from "../../hooks/useGetChats";
-import { getRandomEmoji } from "../../utils/emojis";
 import Conversation from "./Conversation";
 
 const Conversations = () => {
@@ -10,7 +9,6 @@ const Conversations = () => {
         <Conversation
           key={chat._id}
           conversation={chat}
-          emoji={getRandomEmoji()}
           lastIdx={idx === chats.length - 1}
         />
       ))}
