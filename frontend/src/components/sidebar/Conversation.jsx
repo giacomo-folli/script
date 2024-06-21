@@ -1,12 +1,14 @@
 import { useSocketContext } from "../../context/SocketContext";
 import { useAuthContext } from "../../context/AuthContext";
 import useConversation from "../../store/useCoversation";
+import useTheme from "../../store/useTheme";
 
 const Conversation = ({ conversation, emoji, lastIdx }) => {
   const { selected, setSelected } = useConversation();
   const isSelected = selected?._id === conversation._id;
   const { onlineUsers } = useSocketContext();
   const { authUser } = useAuthContext();
+  const { theme } = useTheme()
 
   const isOnline = onlineUsers.includes(conversation._id);
 
@@ -30,7 +32,7 @@ const Conversation = ({ conversation, emoji, lastIdx }) => {
 
         <div className="flex flex-col flex-1">
           <div className="flex gap-3 justify-between">
-            <p className="font-bold text-gray-200">{receiver.fullName}</p>
+            <p className={`font-bold ${theme ? "text-gray-200" : "text-gray-800"}`}>{receiver.fullName}</p>
             <span className="text-xl">{emoji}</span>
           </div>
         </div>

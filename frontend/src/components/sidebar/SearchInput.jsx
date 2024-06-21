@@ -6,6 +6,7 @@ import useGetUsers from "../../hooks/useGetUsers";
 import useConversation from "../../store/useCoversation";
 import toast from "react-hot-toast";
 import useAddContact from "../../hooks/useAddContact";
+import useTheme from "../../store/useTheme";
 
 const SearchInput = () => {
   const [search, setSearch] = useState();
@@ -13,6 +14,7 @@ const SearchInput = () => {
   const { users } = useGetUsers();
   const { authUser } = useAuthContext();
   const { setSelected } = useConversation();
+  const { theme } = useTheme();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -51,14 +53,20 @@ const SearchInput = () => {
           type="submit"
           className="btn btn-circle btn-ghost bg-transparent text-white"
         >
-          <IoSearchSharp className="w-6 h-6 outline-none" />
+          <IoSearchSharp
+            color={theme ? "" : "#222"}
+            className="w-6 h-6 outline-none"
+          />
         </button>
         <button
           type="button"
           onClick={handleListUsers}
           className="btn btn-circle btn-ghost bg-transparent text-white"
         >
-          <FaPlus className="w-4 h-4 outline-none" />
+          <FaPlus
+            color={theme ? "" : "#222"}
+            className="w-4 h-4 outline-none"
+          />
         </button>
       </form>
       {dialogOpen ? (
