@@ -4,7 +4,7 @@ import MessageSkeleton from "../skeletons/MessageSkeleton";
 import Message from "./Message";
 import useListenMessages from "../../hooks/useListenMessages";
 
-const Chat = () => {
+const Chat = ({ isGroup }) => {
   const { messages, loading } = useGetMessages();
   useListenMessages();
   const lastMessageRef = useRef();
@@ -21,7 +21,7 @@ const Chat = () => {
         messages.length > 0 &&
         messages.map((message) => (
           <div key={message._id} ref={lastMessageRef}>
-            <Message message={message} />
+            <Message isGroup={isGroup} message={message} />
           </div>
         ))}
 

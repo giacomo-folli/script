@@ -18,6 +18,7 @@ export const listUsers = async (req, res) => {
 export const listUserChats = async (req, res) => {
   try {
     const loggedInUser = req.user;
+    if(!loggedInUser) throw new Error("No user logged in")
 
     // list of our contacts
     const users = [];
@@ -27,13 +28,9 @@ export const listUserChats = async (req, res) => {
     }
 
     // search for existing chats with our contacts
-    let chats = [];
-    for (let us of users) {
-      let chat = await Chat.findOne({
-        participants: { $all: [loggedInUser._id, us._id] },
-      }).populate("participants");
-      if (chat) chats.push(chat);
-    }
+    let chats = await Chat.find({
+      participants: { $elemMatch: { $eq: loggedInUser._id } },
+    }).populate("participants");
 
     res.status(200).json(chats);
   } catch (error) {
