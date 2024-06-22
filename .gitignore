@@ -26,3 +26,5 @@ backend/server.*
 *.njsproj
 *.sln
 *.sw?
+
+/backend/server.js

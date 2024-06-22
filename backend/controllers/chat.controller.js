@@ -1,119 +1,92 @@
 import Chat from "../models/chat.model.js";
 import { getReceiverSocketId, io } from "../socket/socket.js";
-import Message from "../models/message.model.js";
 
-export const sendMessage = async (req, res) => {
+export const createChatGroup = async (req, res) => {
   try {
-    const { message } = req.body;
-    const { id: chatId } = req.params;
-    const senderId = req.user._id;
+    const loggedInUser = req.user;
+    const { participants } = req.body;
 
-    let chat = await Chat.findOne({
-      participants: { $all: [senderId, receiverId] },
+    if (!participants || participants.length == 0)
+      throw new Error("No participants supplied");
+
+    const res_adj = await fetch(
+      "https://random-word-form.herokuapp.com/random/adjective"
+    );
+    const ADJECTIVE = await res_adj.json();
+    const NOUN = "cats";
+    const GROUP_NAME = ADJECTIVE[0] + " " + NOUN;
+
+    const newGroup = new Chat({
+      admin: loggedInUser._id,
+      isGroup: true,
+      groupImage:
+        "https://api.dicebear.com/9.x/notionists-neutral/svg?seed=Mittens",
+      groupName: GROUP_NAME,
+      participants: [...participants, loggedInUser._id],
     });
 
-    const newMessage = new Message({
-      senderId,
-      receiverId,
-      message,
-    });
+    await newGroup.save();
+    if (!newGroup) throw new Error("Could not create a new group");
 
-    await newMessage.save();
-
-    // const receiverSocketId = getReceiverSocketId(receiverId);
-    // if (receiverSocketId) {
-    //   io.to(receiverSocketId).emit("newMessage", newMessage);
-    // }
-
-    res.status(201).json(newMessage);
+    res.status(200).json(newGroup);
   } catch (error) {
-    console.log("Error in sendMessage Controller:", error.message);
+    console.log("Error in createGroup Controller:", error.message);
     res.status(500).json({ error: "internal server error" });
   }
 };
 
-export const getMessages = async (req, res) => {
+export const leaveChatGroup = async (req, res) => {
   try {
-    const { id: userToChatId } = req.params;
-    const senderId = req.user._id;
+    const loggedInUser = req.user;
+    const { id: chatGroupId } = req.params;
 
-    const chat = await Chat.findOne({
-      participants: { $all: [senderId, userToChatId] },
-    }).populate("messages");
+    const group = await Chat.findOne({ _id: chatGroupId });
+    if (!group) throw new Error("Could not find the group");
 
-    if (!chat) return res.status(200).json([]);
+    // non sono sicuro di questo procedimento
+    if (loggedInUser._id === group.admin._id) {
+      group.admin =
+        loggedInUser._id !== group.participants[0]._id ??
+        (group.participants[0] || null);
+    }
 
-    const messages = chat.messages;
+    const checkParticipants = group.participants.length;
+    group.participants = group.participants.filter(
+      (pr) => pr._id !== loggedInUser._id
+    );
+    await group.save();
+    if (checkParticipants == group.participants.length)
+      throw new Error("Could not leave the group");
 
-    res.status(200).json(messages);
+    res.status(200).json({ message: "ok" });
   } catch (error) {
-    console.log("Error in getMessage Controller:", error.message);
+    console.log("Error in leaveChatGroup Controller:", error.message);
     res.status(500).json({ error: "internal server error" });
   }
 };
 
-export const addUserToGroup = async (req, res) => {
-  try {
-    const { id: chatId } = req.params;
-    const userId = req.user._id;
-
-    let chat = await Chat.findOne({ _id: chatId });
-    if (!chat) return res.status(500).json({ error: "chat not found" });
-
-    // add check if user already present in group
-
-    chat.participants.push(userId);
-
-    await chat.save();
-
-    // const receiverSocketId = getReceiverSocketId(receiverId);
-    // if (receiverSocketId) {
-    //   io.to(receiverSocketId).emit("newMessage", newMessage);
-    // }
-
-    res.status(201).json(chat);
-  } catch (error) {
-    console.log("Error in AddToConversation Controller:", error.message);
-    res.status(500).json({ error: "internal server error" });
-  }
-};
-
-// export const removeUserFromGroup = async (req, res) => {
+// export const addUserToGroup = async (req, res) => {
 //   try {
-//     const { targetId } = req.body;
-//     const { id: groupId } = req.params;
-//     const actorId = req.user._id;
+//     const { id: chatId } = req.params;
+//     const userId = req.user._id;
 
-//     let group = await Group.findOne({ _id: groupId });
-//     if (!group) return res.status(500).json({ error: "Group not found" });
-//     const lengthBefore = group.participants.length;
+//     let chat = await Chat.findOne({ _id: chatId });
+//     if (!chat) return res.status(500).json({ error: "chat not found" });
 
-//     if (actorId.toString() !== group.createdBy.toString())
-//       return res.status(500).json({ error: "Action not permitted" });
+//     // add check if user already present in group
 
-//     let user = await User.findOne({ _id: targetId });
-//     if (!user) return res.status(500).json({ error: "Group not found" });
+//     chat.participants.push(userId);
 
-//     const targetIndex = group.participants.indexOf(user._id);
-
-//     if (targetIndex !== -1) group.participants.splice(targetIndex, 1);
-//     else return res.status(500).json({ error: "No user found in group" });
-
-//     await group.save();
+//     await chat.save();
 
 //     // const receiverSocketId = getReceiverSocketId(receiverId);
 //     // if (receiverSocketId) {
 //     //   io.to(receiverSocketId).emit("newMessage", newMessage);
 //     // }
 
-//     if (group.participants.length >= lengthBefore)
-//       return res
-//         .status(500)
-//         .json({ error: "Something went wrong in deleting the user" });
-
-//     res.status(201).json(group);
+//     res.status(201).json(chat);
 //   } catch (error) {
-//     console.log("Error in sendMessage Controller:", error.message);
+//     console.log("Error in AddToConversation Controller:", error.message);
 //     res.status(500).json({ error: "internal server error" });
 //   }
 // };

@@ -4,8 +4,11 @@ import useConversation from "../../store/useCoversation";
 import ChatInput from "./ChatInput";
 import { TiMessages } from "react-icons/ti";
 import { useAuthContext } from "../../context/AuthContext";
+import useTheme from "../../store/useTheme";
+
 const ChatContainer = () => {
   const { selected, setSelected } = useConversation();
+  const { theme } = useTheme();
 
   useEffect(() => {
     // cleanup func (unmounts)
@@ -18,12 +21,16 @@ const ChatContainer = () => {
         <NoChatSelected />
       ) : (
         <>
-          <div className="bg-slate-500 px-4 py-2 mb-2">
-            <span className="label-text">To:</span>{" "}
+          <div
+            className={`bg-slate-400 px-4 py-2 mb-2 ${
+              !theme ? "rounded-xl" : ""
+            }`}
+          >
+            <span className="label-text text-gray-900">To:</span>{" "}
             <span className="text-gray-900 font-bold">{selected.fullName}</span>
           </div>
 
-          <Chat />
+          <Chat isGroup={selected.isGroup} />
           <ChatInput />
         </>
       )}

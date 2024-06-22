@@ -5,7 +5,8 @@ import { useAuthContext } from "../../context/AuthContext";
 import useGetUsers from "../../hooks/useGetUsers";
 import useConversation from "../../store/useCoversation";
 import toast from "react-hot-toast";
-import useAddContact from "../../hooks/useAddContact";
+import useTheme from "../../store/useTheme";
+import UsersDropdown from "./UsersDropdown";
 
 const SearchInput = () => {
   const [search, setSearch] = useState();
@@ -13,6 +14,7 @@ const SearchInput = () => {
   const { users } = useGetUsers();
   const { authUser } = useAuthContext();
   const { setSelected } = useConversation();
+  const { theme } = useTheme();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -39,11 +41,11 @@ const SearchInput = () => {
 
   return (
     <>
-      <form className="flex items-center gap-3" onSubmit={handleSubmit}>
+      <form className="flex items-center gap-2" onSubmit={handleSubmit}>
         <input
           type="text"
           placeholder="Search..."
-          className="input input-ghost text-black"
+          className="bg-slate-500 bg-opacity-5 focus:bg-transparent input input-ghost border-slate-200 text-black"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
         />
@@ -51,59 +53,26 @@ const SearchInput = () => {
           type="submit"
           className="btn btn-circle btn-ghost bg-transparent text-white"
         >
-          <IoSearchSharp className="w-6 h-6 outline-none" />
+          <IoSearchSharp
+            color={theme ? "" : "#222"}
+            className="w-6 h-6 outline-none"
+          />
         </button>
         <button
           type="button"
           onClick={handleListUsers}
           className="btn btn-circle btn-ghost bg-transparent text-white"
         >
-          <FaPlus className="w-4 h-4 outline-none" />
+          <FaPlus
+            color={theme ? "" : "#222"}
+            className="w-4 h-4 outline-none"
+          />
         </button>
       </form>
-      {dialogOpen ? (
-        <UsersDialog users={users} loggedInUser={authUser} />
-      ) : (
-        <></>
+      {dialogOpen && (
+        <UsersDropdown users={users} loggedInUser={authUser} theme={theme} toggleDialog={setDialogOpen} />
       )}
     </>
-  );
-};
-
-const UsersDialog = ({ users, loggedInUser }) => {
-  const { addContact } = useAddContact();
-
-  let newUsers = [];
-  for (let us of users) {
-    if (!!loggedInUser.contacts && !loggedInUser.contacts.includes(us._id))
-      newUsers.push(us);
-  }
-
-  return (
-    <div className="p-2 bg-white bg-opacity-5 rounded-lg mt-4">
-      {!!users?.length &&
-        newUsers.map((user) => (
-          <div
-            key={user._id}
-            className={`flex gap-2 items-center hover:bg-sky-500 rounded p-2 py-1 cursor-pointer`}
-            onClick={() => addContact(user)}
-          >
-            <div className="avatar">
-              <div className="w-12 rounded-full">
-                <img src={user.profilePic} alt="user avatar" />
-              </div>
-            </div>
-
-            <div className="flex flex-col flex-1">
-              <div className="flex gap-3 justify-between">
-                <p className="font-bold text-gray-200">{user.fullName}</p>
-              </div>
-            </div>
-          </div>
-
-          // {(idx !== users.length) && <div className="divider my-0 py-0 h-1" />}
-        ))}
-    </div>
   );
 };
 

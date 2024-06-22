@@ -22,7 +22,7 @@ export const createMessage = async (req, res) => {
       chatId,
       message,
     });
-    await newMessage.save();
+    (await newMessage.save()).populate("senderId");
     if (!newMessage) throw new Error("Could not create a new message");
 
     chat.messages.push(newMessage._id);
@@ -49,7 +49,10 @@ export const getMessages = async (req, res) => {
 
     const chat = await Chat.findOne({
       _id: chatId,
-    }).populate("messages");
+    }).populate({
+      path: "messages",
+      populate: { path: "senderId" },
+    });
 
     if (!chat) throw new Error("Could not find the chat");
     if (!chat.messages) return res.status(200).json([]);

@@ -22,7 +22,7 @@ const chatSchema = new mongoose.Schema(
     groupName: {
       type: String,
       required: false,
-      default: "#group",
+      default: "#private_chat",
     },
     groupImage: {
       type: String,
@@ -36,6 +36,14 @@ const chatSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
+/**
+ * @param {Array} participants
+ * @param {Array} messages
+ * @param {boolean} isGroup
+ * @param {string} groupName
+ * @param {string} groupImage
+ * @param {Object} admin
+ */
 const Chat = mongoose.model("Chat", chatSchema);
 
 export default Chat;

@@ -5,11 +5,18 @@ import Login from "./pages/login/Login";
 import SignUp from "./pages/signup/SignUp";
 import { Toaster } from "react-hot-toast";
 import { useAuthContext } from "./context/AuthContext";
+import useTheme from "./store/useTheme";
 
 function App() {
   const { authUser } = useAuthContext();
+  const { theme } = useTheme();
   return (
-    <div className="p-4 h-screen flex items-center justify-center bg-gradient">
+    // .bg-gradient class to add moving gradients in bg
+    <div
+      className={`p-4 h-screen flex items-center justify-center ${
+        theme ? "bg-gradient" : "bg-white text-black"
+      }`}
+    >
       <Routes>
         <Route
           path="/"
