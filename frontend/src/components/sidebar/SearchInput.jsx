@@ -5,8 +5,8 @@ import { useAuthContext } from "../../context/AuthContext";
 import useGetUsers from "../../hooks/useGetUsers";
 import useConversation from "../../store/useCoversation";
 import toast from "react-hot-toast";
-import useAddContact from "../../hooks/useAddContact";
 import useTheme from "../../store/useTheme";
+import UsersDropdown from "./UsersDropdown";
 
 const SearchInput = () => {
   const [search, setSearch] = useState();
@@ -41,7 +41,7 @@ const SearchInput = () => {
 
   return (
     <>
-      <form className="flex items-center gap-3" onSubmit={handleSubmit}>
+      <form className="flex items-center gap-2" onSubmit={handleSubmit}>
         <input
           type="text"
           placeholder="Search..."
@@ -69,54 +69,10 @@ const SearchInput = () => {
           />
         </button>
       </form>
-      {dialogOpen ? (
-        <UsersDialog users={users} loggedInUser={authUser} />
-      ) : (
-        <></>
+      {dialogOpen && (
+        <UsersDropdown users={users} loggedInUser={authUser} theme={theme} />
       )}
     </>
-  );
-};
-
-const UsersDialog = ({ users, loggedInUser }) => {
-  const { addContact } = useAddContact();
-
-  let newUsers = [];
-  for (let us of users) {
-    if (!!loggedInUser.contacts && !loggedInUser.contacts.includes(us._id))
-      newUsers.push(us);
-  }
-
-  return (
-    <div className="p-2 bg-white bg-opacity-5 rounded-lg mt-4">
-      {newUsers?.length ? (
-        newUsers.map((user) => (
-          <div
-            key={user._id}
-            className={`flex gap-2 items-center hover:bg-sky-500 rounded p-2 py-1 cursor-pointer`}
-            onClick={() => addContact(user)}
-          >
-            <div className="avatar">
-              <div className="w-12 rounded-full">
-                <img src={user.profilePic} alt="user avatar" />
-              </div>
-            </div>
-
-            <div className="flex flex-col flex-1">
-              <div className="flex gap-3 justify-between">
-                <p className="font-bold text-gray-200">{user.fullName}</p>
-              </div>
-            </div>
-          </div>
-
-          // {(idx !== users.length) && <div className="divider my-0 py-0 h-1" />}
-        ))
-      ) : (
-        <>
-          <div className="w-full text-center opacity-70">No new users!</div>
-        </>
-      )}
-    </div>
   );
 };
 
