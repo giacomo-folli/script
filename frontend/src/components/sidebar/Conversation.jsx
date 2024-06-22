@@ -1,4 +1,5 @@
 import { useSocketContext } from "../../context/SocketContext";
+import { isPersonOrGroup } from "../../utils/isPersonOrGroup";
 import { useAuthContext } from "../../context/AuthContext";
 import useConversation from "../../store/useCoversation";
 import useTheme from "../../store/useTheme";
@@ -12,18 +13,6 @@ const Conversation = ({ conversation, lastIdx }) => {
 
   const isOnline = onlineUsers.includes(conversation._id);
 
-  let item = () => {
-    if (conversation.isGroup)
-      return {
-        fullName: conversation.groupName || "",
-        profilePic: conversation.groupImage || "",
-      };
-    else
-      return conversation.participants.filter(
-        (user) => user._id !== authUser._id
-      )[0];
-  };
-
   return (
     <>
       <div
@@ -34,7 +23,7 @@ const Conversation = ({ conversation, lastIdx }) => {
       >
         <div className={`avatar ${isOnline ? " online" : ""}`}>
           <div className="w-12 rounded-full">
-            <img src={item().profilePic} alt="user avatar" />
+            <img src={isPersonOrGroup(conversation, authUser).profilePic} alt="user avatar" />
           </div>
         </div>
 
@@ -45,7 +34,7 @@ const Conversation = ({ conversation, lastIdx }) => {
                 theme ? "text-gray-200" : "text-gray-700"
               }`}
             >
-              {item().fullName}
+              {isPersonOrGroup(conversation, authUser).fullName}
             </p>
             <div className="rounded-full flex items-center justify-center w-4 h-4 btn-circle bg-sky-500 bg-opacity-70">
               <span className="text-xs">1</span>
