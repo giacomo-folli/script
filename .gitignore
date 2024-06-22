@@ -12,6 +12,8 @@ dist
 dist-ssr
 *.local
 
+/backend/server.js
+
 .env
 
 # Editor directories and files
