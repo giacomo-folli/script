@@ -22,7 +22,7 @@ export const createMessage = async (req, res) => {
       chatId,
       message,
     });
-    await newMessage.save();
+    (await newMessage.save()).populate("senderId");
     if (!newMessage) throw new Error("Could not create a new message");
 
     chat.messages.push(newMessage._id);

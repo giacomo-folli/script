@@ -3,8 +3,9 @@ import { FaPlus } from "react-icons/fa6";
 import useAddContact from "../../hooks/useAddContact";
 import useGetChats from "../../hooks/useGetChats";
 import { isPersonOrGroup } from "../../utils/isPersonOrGroup";
+import useCreateGroup from "../../hooks/useCreateGroup";
 
-const UsersDropdown = ({ users, loggedInUser, theme }) => {
+const UsersDropdown = ({ users, loggedInUser, theme, toggleDialog }) => {
   const { addContact } = useAddContact();
 
   let newUsers = [];
@@ -26,15 +27,19 @@ const UsersDropdown = ({ users, loggedInUser, theme }) => {
 
   return (
     <>
-      <GroupDialog loggedInUser={loggedInUser} theme={theme} />
-      <span className="mt-2 text-sm opacity-80">New group</span>
+      <GroupDialog
+        loggedInUser={loggedInUser}
+        theme={theme}
+        toggleDialog={toggleDialog}
+      />
+      <span className="mt-2 text-xs opacity-80">New group</span>
       <button
         className="btn btn-block btn-sm p-2 rounded-lg mt-1"
         onClick={() => document.getElementById("group-modal").showModal()}
       >
         Add a new group
       </button>
-      <span className="mt-2 text-sm opacity-80">New contact</span>
+      <span className="mt-2 text-xs opacity-80">New contact</span>
       <div className="bg-white bg-opacity-5 rounded-lg mt-1">
         {newUsers?.length ? (
           newUsers.map((user) => (
@@ -77,17 +82,29 @@ const UsersDropdown = ({ users, loggedInUser, theme }) => {
             // {(idx !== users.length) && <div className="divider my-0 py-0 h-1" />}
           ))
         ) : (
-          <div className="w-full text-center opacity-70">No new users!</div>
+          <div className="w-full text-center p-1 text-sm border opacity-70 border-dashed rounded-lg">
+            No new users!
+          </div>
         )}
       </div>
     </>
   );
 };
 
-const GroupDialog = ({ theme, loggedInUser }) => {
+const GroupDialog = ({ theme, loggedInUser, toggleDialog }) => {
   const [participants, setParticipants] = useState([]);
+  const { createGroup } = useCreateGroup();
   const { chats } = useGetChats();
   const onlyChat = chats.filter((ct) => !ct.isGroup);
+
+  const handleCreateGroup = async (e) => {
+    e.preventDefault();
+    if (!participants) return;
+    await createGroup(participants);
+    const dialog = document.getElementById("group-modal");
+    dialog.close();
+    toggleDialog();
+  };
 
   const isDisabled = (id) => {
     return participants.includes(id);
@@ -157,7 +174,10 @@ const GroupDialog = ({ theme, loggedInUser }) => {
           <div className="w-full text-center opacity-70">No contacts!</div>
         )}
         <div className="w-fit mt-4 ml-auto">
-          <button className="px-8 btn btn-block bg-black hover:bg-black text-slate-200">
+          <button
+            className="px-8 btn btn-block bg-black hover:bg-black text-slate-200"
+            onClick={handleCreateGroup}
+          >
             Create
           </button>
         </div>

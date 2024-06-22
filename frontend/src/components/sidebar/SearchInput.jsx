@@ -70,7 +70,7 @@ const SearchInput = () => {
         </button>
       </form>
       {dialogOpen && (
-        <UsersDropdown users={users} loggedInUser={authUser} theme={theme} />
+        <UsersDropdown users={users} loggedInUser={authUser} theme={theme} toggleDialog={setDialogOpen} />
       )}
     </>
   );

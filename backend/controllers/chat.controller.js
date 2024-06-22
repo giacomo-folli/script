@@ -1,6 +1,5 @@
 import Chat from "../models/chat.model.js";
 import { getReceiverSocketId, io } from "../socket/socket.js";
-import Message from "../models/message.model.js";
 
 export const createChatGroup = async (req, res) => {
   try {
