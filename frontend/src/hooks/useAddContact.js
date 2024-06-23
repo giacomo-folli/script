@@ -13,10 +13,13 @@ const useAddContact = () => {
       });
       const data = await res.json();
       if (data.error) throw new Error(data.error);
+
+      localStorage.setItem("chat-user", JSON.stringify(data));
     } catch (error) {
       toast.error(error.message);
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   };
 
   return { addContact, loading };

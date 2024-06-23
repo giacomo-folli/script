@@ -8,9 +8,8 @@ import toast from "react-hot-toast";
 import useTheme from "../../store/useTheme";
 import UsersDropdown from "./UsersDropdown";
 
-const SearchInput = () => {
+const SearchInput = ({dialogOpen, setDialogOpen}) => {
   const [search, setSearch] = useState();
-  const [dialogOpen, setDialogOpen] = useState(false);
   const { users } = useGetUsers();
   const { authUser } = useAuthContext();
   const { setSelected } = useConversation();

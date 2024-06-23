@@ -69,7 +69,7 @@ export const addToContacts = async (req, res) => {
     });
     await newChat.save();
 
-    res.status(200).json({ message: "ok" });
+    res.status(200).json(user);
   } catch (error) {
     console.log("Error in addContact Controller:", error.message);
     res.status(500).json({ error: "internal server error" });
