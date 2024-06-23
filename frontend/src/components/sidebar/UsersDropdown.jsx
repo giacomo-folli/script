@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { FaPlus } from "react-icons/fa6";
 import useAddContact from "../../hooks/useAddContact";
 import useGetChats from "../../hooks/useGetChats";
@@ -6,24 +6,15 @@ import { isPersonOrGroup } from "../../utils/isPersonOrGroup";
 import useCreateGroup from "../../hooks/useCreateGroup";
 
 const UsersDropdown = ({ users, loggedInUser, theme, toggleDialog }) => {
+  const loggedIn = JSON.parse(localStorage.getItem("chat-user"));
+  const newUsers = users.filter((us) => !loggedIn.contacts?.includes(us._id));
+
   const { addContact } = useAddContact();
 
-  let newUsers = [];
-  const populateNewUsers = () => {
-    newUsers = [];
-    users.map((us) => {
-      // Qua c'è un bug perchè per aggiornare i contatti dell'utente loggato, bisogna uscire e riloggare.
-      // Il bug è dovuto dal fatto che le informazioni dell'utente loggato le prende dai cookies e questi non
-      // vengono aggiornati quando vengono fatte modifiche sulla rubrica dei contatti!!
-      if (!!loggedInUser.contacts && !loggedInUser.contacts.includes(us._id))
-        newUsers.push(us);
-    });
+  const handleAddContact = async (user) => {
+    await addContact(user);
+    toggleDialog();
   };
-
-  populateNewUsers(newUsers);
-  useEffect(() => {
-    populateNewUsers(newUsers);
-  }, []);
 
   return (
     <>
@@ -40,8 +31,8 @@ const UsersDropdown = ({ users, loggedInUser, theme, toggleDialog }) => {
         Add a new group
       </button>
       <span className="mt-2 text-xs opacity-80">New contact</span>
-      <div className="bg-white bg-opacity-5 rounded-lg mt-1">
-        {newUsers?.length ? (
+      <div className="bg-white bg-opacity-5 rounded-lg mt-1 overflow-auto">
+        {newUsers.length > 0 ? (
           newUsers.map((user) => (
             <div
               key={user._id}
@@ -69,7 +60,7 @@ const UsersDropdown = ({ users, loggedInUser, theme, toggleDialog }) => {
 
               <button
                 type="button"
-                onClick={() => addContact(user)}
+                onClick={async () => await handleAddContact(user)}
                 className="btn btn-circle btn-ghost bg-transparent text-white"
               >
                 <FaPlus
