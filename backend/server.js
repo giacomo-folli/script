@@ -6,6 +6,7 @@ import authRoutes from "./routes/auth.routes.js";
 import messageRoutes from "./routes/message.routes.js";
 import userRoutes from "./routes/user.routes.js";
 import groupRoutes from "./routes/group.routes.js";
+import uploadRoutes from "./routes/upload.routes.js";
 import connectToDb from "./db/connect.js";
 import { app, server } from "./socket/socket.js";
 
@@ -22,6 +23,7 @@ app.use("/api/auth", authRoutes);
 app.use("/api/messages", messageRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/groups", groupRoutes);
+app.use("/api/upload", uploadRoutes);
 
 // app.use(express.static(path.join(__dirname, "/frontend/dist")));
 

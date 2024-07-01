@@ -2,10 +2,12 @@ import { useState } from "react";
 import { BsSend } from "react-icons/bs";
 import useSendMessage from "../../hooks/useSendMessage";
 import useTheme from "../../store/useTheme";
+import useSendFile from "../../hooks/useSendFile";
 
 const ChatInput = () => {
   const [message, setMessage] = useState("");
   const { loading, sendMessage } = useSendMessage();
+  const { sendFile } = useSendFile();
   const { theme } = useTheme();
 
   const handleSubmit = async (e) => {
@@ -13,6 +15,13 @@ const ChatInput = () => {
     if (!message) return;
     await sendMessage(message);
     setMessage("");
+  };
+
+  const handleSendFile = async (e) => {
+    e.preventDefault();
+    const file = e.target.files[0];
+    if (!file) return;
+    await sendFile(file);
   };
 
   return (
@@ -31,6 +40,7 @@ const ChatInput = () => {
 
         <label className="absolute inset-y-0 end-8 flex items-center px-3 cursor-pointer">
           <input
+            onChange={handleSendFile}
             id="send-image"
             type="file"
             className="hidden"
