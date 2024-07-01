@@ -1,5 +1,7 @@
-- cambiare Search in modo che restituisca una lista di users, piuttosto che selezionare automaticamente il primo trovato
-- implementare supporto gifs
-- aggiungere semplice bot che risponde alle domande
-- bot to explain words: https://dictionaryapi.dev/
-- sistemare bug nel flow di aggiunta contatti (elenco non aggiornato in real time) [FATTO]
+- ! Aggiungere immagini in chat
+- ! Aggiungere immagine profilo
+- ! sistemare bug nel flow di aggiunta contatti (elenco non aggiornato in real time) **[FATTO]**
+- \+ aggiungere supporto gifs
+- \+ cambiare Search in modo che restituisca una lista di users, piuttosto che selezionare automaticamente il primo trovato
+- \+ aggiungere semplice bot che risponde alle domande
+- \+ bot to explain words: https://dictionaryapi.dev/

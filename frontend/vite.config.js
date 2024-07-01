@@ -9,10 +9,6 @@ export default defineConfig({
     proxy: {
       "/api": {
         target: "http://localhost:5000",
-        // non sono sicuro di questi
-        changeOrigin: true,
-        secure: false,
-        ws: false,
       },
     },
   },
