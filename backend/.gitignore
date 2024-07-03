@@ -27,4 +27,5 @@ backend/server.*
 *.sln
 *.sw?
 
-/backend/server.js
+uploads/*
+docs

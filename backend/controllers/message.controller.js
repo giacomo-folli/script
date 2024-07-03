@@ -17,11 +17,22 @@ export const createMessage = async (req, res) => {
 
     if (!chat) throw new Error("No chat found");
 
-    const newMessage = new Message({
-      senderId,
-      chatId,
-      message,
-    });
+    let newMessage;
+    if (message.isFile) {
+      newMessage = new Message({
+        senderId,
+        chatId,
+        isFile: true,
+        type: message.type,
+        fileName: message.fileName,
+      });
+    } else {
+      newMessage = new Message({
+        senderId,
+        chatId,
+        message,
+      });
+    }
     (await newMessage.save()).populate("senderId");
     if (!newMessage) throw new Error("Could not create a new message");
 

@@ -12,6 +12,19 @@ const messageSchema = new mongoose.Schema(
       ref: "Chat",
       required: false,
     },
+    isFile: {
+      type: Boolean,
+      required: false,
+      default: false,
+    },
+    type: {
+      type: String,
+      required: false
+    },
+    fileName: {
+      type: String,
+      required: false,
+    },
     message: {
       type: String,
       required: false,
