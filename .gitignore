@@ -27,3 +27,4 @@ dist-ssr
 
 /backend/server.js
 uploads/*
+docs

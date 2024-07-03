@@ -4,6 +4,7 @@
 	"description": "",
 	"main": "server.js",
 	"scripts": {
+		"test": "jest",
 		"server": "nodemon backend/server.js",
 		"start": "node backend/server.js",
 		"build": "npm install && npm install --prefix frontend && npm run build --prefix frontend"
@@ -24,6 +25,8 @@
 		"socket.io": "^4.7.4"
 	},
 	"devDependencies": {
-		"nodemon": "^3.0.3"
+		"jest": "^29.7.0",
+		"nodemon": "^3.0.3",
+		"supertest": "^7.0.0"
 	}
 }
