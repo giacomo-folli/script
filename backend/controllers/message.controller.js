@@ -23,6 +23,7 @@ export const createMessage = async (req, res) => {
         senderId,
         chatId,
         isFile: true,
+        type: message.type,
         fileName: message.fileName,
       });
     } else {

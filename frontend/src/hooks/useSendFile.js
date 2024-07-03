@@ -28,6 +28,7 @@ const useSendFile = () => {
         body: JSON.stringify({
           message: {
             isFile: true,
+            type: data.type,
             fileName: data.fileName,
           },
         }),

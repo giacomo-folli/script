@@ -1,6 +1,6 @@
 import { useAuthContext } from "../../context/AuthContext";
 import { extractTime } from "../../utils/extractTime";
-import DocIcon from "./DocIcon";
+import FileMessage from "./FileMessage";
 // import useConversation from "../../store/useCoversation";
 
 const Message = ({ message, isGroup }) => {
@@ -13,40 +13,32 @@ const Message = ({ message, isGroup }) => {
   // const profilePic = fromMe ? authUser.profilePic : selected?.profilePic;
 
   return message.isFile ? (
-    <div className={`chat ${chatClassName}`}>
-      <div className="chat-image avatar">
-        <div className="w-10 rounded-full">
-          <img src={message.senderId.profilePic} alt="user avatar" />
-        </div>
-      </div>
-      <div
-        className={`flex items-center justify-center gap-2 rounded-2xl text-white ${bubbleBgColor} cursor-pointer`}
-      >
-        <a
-          className="btn btn-ghost py-3 relative h-fit rounded-xl"
-          href={"http://localhost:5000/api/upload/" + message.fileName}
-        >
-          <img
-            src={"http://localhost:5000/api/upload/" + message.fileName}
-            className="w-32 h-32 object-cover rounded-lg filter brightness-75"
-          />
-
-          <div className="absolute top-[35%] w-full flex flex-col gap-2 items-center justify-center">
-            <span className="">
-              <DocIcon />
-            </span>
-            {message.fileName.split("-").splice(1)}
-          </div>
-        </a>
-      </div>
-      <div className="chat-footer opacity-50 text-xs flex gap-1 items-center">
-        {extractTime(message.createdAt)}
-        <span className="capitalize">
-          {isGroup && !fromMe ? message.senderId.fullName : ""}
-        </span>
-      </div>
-    </div>
+    <FileMessage
+      chatClassName={chatClassName}
+      bubbleBgColor={bubbleBgColor}
+      message={message}
+      isGroup={isGroup}
+      fromMe={fromMe}
+    />
   ) : (
+    <TextMessage
+      chatClassName={chatClassName}
+      bubbleBgColor={bubbleBgColor}
+      message={message}
+      isGroup={isGroup}
+      fromMe={fromMe}
+    />
+  );
+};
+
+const TextMessage = ({
+  chatClassName,
+  bubbleBgColor,
+  message,
+  isGroup,
+  fromMe,
+}) => {
+  return (
     <div className={`chat ${chatClassName}`}>
       <div className="chat-image avatar">
         <div className="w-10 rounded-full">
@@ -65,5 +57,4 @@ const Message = ({ message, isGroup }) => {
     </div>
   );
 };
-
 export default Message;

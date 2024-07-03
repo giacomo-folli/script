@@ -4,6 +4,7 @@ export const uploadFile = async (req, res) => {
   const file = req.file;
   res.status(201).json({
     fileName: file.filename,
+    type: file.mimetype,
     path: file.path,
   });
 };
