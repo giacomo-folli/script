@@ -9,7 +9,7 @@ let lucaUserToken;
 let lucaChats, lucaAndAnnaChat;
 let luca, anna;
 beforeAll(async () => {
-  const url = `mongodb://127.0.0.1/`;
+  const url = process.env.MONGO_DB_URI;
   await mongoose.connect(url, {
     dbName: "script_test",
   });
