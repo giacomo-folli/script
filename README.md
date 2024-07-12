@@ -1,7 +1,9 @@
-- ! Aggiungere immagini in chat
-- ! Aggiungere immagine profilo
+- ! Aggiungere immagini in chat **[FATTO]**
 - ! sistemare bug nel flow di aggiunta contatti (elenco non aggiornato in real time) **[FATTO]**
+- ! Sistemare search
+- ! Aggiungere metodo di controllo sui messaggi non ancora aperti
 - \+ aggiungere supporto gifs
-- \+ cambiare Search in modo che restituisca una lista di users, piuttosto che selezionare automaticamente il primo trovato
-- \+ aggiungere semplice bot che risponde alle domande
 - \+ bot to explain words: https://dictionaryapi.dev/
+
+- ! Fare documentazione
+- ! Fare presentazione
