@@ -2,15 +2,14 @@ import path from "path";
 import dotenv from "dotenv";
 import express from "express";
 import cookieParser from "cookie-parser";
-import authRoutes from "../routes/auth.routes.js"
-import messageRoutes from "../routes/message.routes.js"
-import userRoutes from "../routes/user.routes.js"
-import groupRoutes from "../routes/group.routes.js"
-import uploadRoutes from "../routes/upload.routes.js"
+import authRoutes from "../routes/auth.routes.js";
+import messageRoutes from "../routes/message.routes.js";
+import userRoutes from "../routes/user.routes.js";
+import groupRoutes from "../routes/group.routes.js";
+import uploadRoutes from "../routes/upload.routes.js";
 import { app } from "../socket/socket.js";
 
-const configServer = () => {
-  // const __dirname = path.resolve();
+const configServer = (dirname) => {
   dotenv.config();
 
   app.use(express.json()); // to parse the incoming requests with JSON payloads (from req.body)
@@ -22,11 +21,11 @@ const configServer = () => {
   app.use("/api/groups", groupRoutes);
   app.use("/api/upload", uploadRoutes);
 
-  // app.use(express.static(path.join(__dirname, "/frontend/dist")));
+  app.use(express.static(path.join(dirname, "/public")));
 
-  // app.get("*", (req, res) => {
-  //   res.sendFile(path.join(__dirname, "frontend", "dist", "index.html"));
-  // });
+  app.get("*", (req, res) => {
+    res.sendFile(path.join(dirname, "public", "index.html"));
+  });
 
   return app;
 };
