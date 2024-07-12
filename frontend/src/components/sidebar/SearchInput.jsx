@@ -5,15 +5,13 @@ import { useAuthContext } from "../../context/AuthContext";
 import useGetUsers from "../../hooks/useGetUsers";
 import useConversation from "../../store/useCoversation";
 import toast from "react-hot-toast";
-import useTheme from "../../store/useTheme";
 import UsersDropdown from "./UsersDropdown";
 
-const SearchInput = ({dialogOpen, setDialogOpen}) => {
+const SearchInput = ({ dialogOpen, setDialogOpen }) => {
   const [search, setSearch] = useState();
   const { users } = useGetUsers();
   const { authUser } = useAuthContext();
   const { setSelected } = useConversation();
-  const { theme } = useTheme();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -52,24 +50,22 @@ const SearchInput = ({dialogOpen, setDialogOpen}) => {
           type="submit"
           className="btn btn-circle btn-ghost bg-transparent text-white"
         >
-          <IoSearchSharp
-            color={theme ? "" : "#222"}
-            className="w-6 h-6 outline-none"
-          />
+          <IoSearchSharp className="w-5 h-5 outline-none" />
         </button>
         <button
           type="button"
           onClick={handleListUsers}
           className="btn btn-circle btn-ghost bg-transparent text-white"
         >
-          <FaPlus
-            color={theme ? "" : "#222"}
-            className="w-4 h-4 outline-none"
-          />
+          <FaPlus className="w-4 h-4 outline-none" />
         </button>
       </form>
       {dialogOpen && (
-        <UsersDropdown users={users} loggedInUser={authUser} theme={theme} toggleDialog={setDialogOpen} />
+        <UsersDropdown
+          users={users}
+          loggedInUser={authUser}
+          toggleDialog={setDialogOpen}
+        />
       )}
     </>
   );

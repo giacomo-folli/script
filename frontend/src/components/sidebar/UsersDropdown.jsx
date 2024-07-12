@@ -5,7 +5,7 @@ import useGetChats from "../../hooks/useGetChats";
 import { isPersonOrGroup } from "../../utils/isPersonOrGroup";
 import useCreateGroup from "../../hooks/useCreateGroup";
 
-const UsersDropdown = ({ users, loggedInUser, theme, toggleDialog }) => {
+const UsersDropdown = ({ users, loggedInUser, toggleDialog }) => {
   const loggedIn = JSON.parse(localStorage.getItem("chat-user"));
   const newUsers = users.filter((us) => !loggedIn.contacts?.includes(us._id));
 
@@ -18,11 +18,7 @@ const UsersDropdown = ({ users, loggedInUser, theme, toggleDialog }) => {
 
   return (
     <>
-      <GroupDialog
-        loggedInUser={loggedInUser}
-        theme={theme}
-        toggleDialog={toggleDialog}
-      />
+      <GroupDialog loggedInUser={loggedInUser} toggleDialog={toggleDialog} />
       <span className="mt-2 text-xs opacity-80">New group</span>
       <button
         className="btn btn-block btn-sm p-2 rounded-lg mt-1"
@@ -47,13 +43,7 @@ const UsersDropdown = ({ users, loggedInUser, theme, toggleDialog }) => {
 
                 <div className="flex flex-col flex-1">
                   <div className="flex gap-3 justify-between">
-                    <p
-                      className={`font-bold ${
-                        !theme ? "text-gray-700" : "text-gray-200"
-                      }`}
-                    >
-                      {user.fullName}
-                    </p>
+                    <p className="font-bold text-gray-200">{user.fullName}</p>
                   </div>
                 </div>
               </div>
@@ -63,10 +53,7 @@ const UsersDropdown = ({ users, loggedInUser, theme, toggleDialog }) => {
                 onClick={async () => await handleAddContact(user)}
                 className="btn btn-circle btn-ghost bg-transparent text-white"
               >
-                <FaPlus
-                  color={theme ? "" : "#222"}
-                  className="w-4 h-4 outline-none"
-                />
+                <FaPlus className="w-4 h-4 outline-none" />
               </button>
             </div>
 
@@ -82,7 +69,7 @@ const UsersDropdown = ({ users, loggedInUser, theme, toggleDialog }) => {
   );
 };
 
-const GroupDialog = ({ theme, loggedInUser, toggleDialog }) => {
+const GroupDialog = ({ loggedInUser, toggleDialog }) => {
   const [participants, setParticipants] = useState([]);
   const { createGroup } = useCreateGroup();
   const { chats } = useGetChats();
@@ -107,18 +94,12 @@ const GroupDialog = ({ theme, loggedInUser, toggleDialog }) => {
       <div className="modal-box">
         <form method="dialog">
           {/* if there is a button in form, it will close the modal */}
-          <button
-            className={`btn btn-sm btn-circle btn-ghost absolute right-2 top-2 ${
-              theme ? "text-gray-700" : ""
-            }`}
-          >
+          <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2 text-gray-700">
             ✕
           </button>
         </form>
-        <h3 className={`font-bold text-lg ${theme ? "text-gray-700" : ""}`}>
-          Create new group
-        </h3>
-        <p className={`pb-4 text-xs ${theme ? "text-gray-700" : ""}`}>
+        <h3 className="font-bold text-lg text-gray-700">Create new group</h3>
+        <p className="pb-4 text-xs text-gray-700">
           Press ESC key or click on ✕ button to close
         </p>
 

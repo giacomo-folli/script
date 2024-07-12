@@ -2,14 +2,12 @@ import { useSocketContext } from "../../context/SocketContext";
 import { isPersonOrGroup } from "../../utils/isPersonOrGroup";
 import { useAuthContext } from "../../context/AuthContext";
 import useConversation from "../../store/useCoversation";
-import useTheme from "../../store/useTheme";
 
 const Conversation = ({ conversation, lastIdx }) => {
   const { selected, setSelected } = useConversation();
   const isSelected = selected?._id === conversation._id;
   const { onlineUsers } = useSocketContext();
   const { authUser } = useAuthContext();
-  const { theme } = useTheme();
 
   const isOnline = onlineUsers.includes(conversation._id);
 
@@ -23,17 +21,16 @@ const Conversation = ({ conversation, lastIdx }) => {
       >
         <div className={`avatar ${isOnline ? " online" : ""}`}>
           <div className="w-12 rounded-full">
-            <img src={isPersonOrGroup(conversation, authUser).profilePic} alt="user avatar" />
+            <img
+              src={isPersonOrGroup(conversation, authUser).profilePic}
+              alt="user avatar"
+            />
           </div>
         </div>
 
         <div className="flex flex-col flex-1">
           <div className="flex gap-3 justify-between items-center">
-            <p
-              className={`font-bold ${
-                theme ? "text-gray-200" : "text-gray-700"
-              }`}
-            >
+            <p className="font-bold text-gray-200">
               {isPersonOrGroup(conversation, authUser).fullName}
             </p>
             <div className="rounded-full flex items-center justify-center w-4 h-4 btn-circle bg-sky-500 bg-opacity-70">

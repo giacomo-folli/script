@@ -1,14 +1,12 @@
 import { useState } from "react";
 import { BsSend } from "react-icons/bs";
 import useSendMessage from "../../hooks/useSendMessage";
-import useTheme from "../../store/useTheme";
 import useSendFile from "../../hooks/useSendFile";
 
 const ChatInput = () => {
   const [message, setMessage] = useState("");
   const { loading, sendMessage } = useSendMessage();
   const { sendFile } = useSendFile();
-  const { theme } = useTheme();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -25,10 +23,7 @@ const ChatInput = () => {
   };
 
   return (
-    <form
-      className={`px-4 my-3 ${theme ? "" : "text-black"}`}
-      onSubmit={handleSubmit}
-    >
+    <form className="px-4 my-3" onSubmit={handleSubmit}>
       <div className="w-full relative">
         <input
           type="text"
@@ -65,11 +60,7 @@ const ChatInput = () => {
           type="submit"
           className="absolute inset-y-0 end-0 flex items-center p-3"
         >
-          {loading ? (
-            <span className="loading loading-spinner" />
-          ) : (
-            <BsSend color={theme ? "" : "white"} />
-          )}
+          {loading ? <span className="loading loading-spinner" /> : <BsSend />}
         </button>
       </div>
     </form>
