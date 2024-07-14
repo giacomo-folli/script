@@ -9,6 +9,7 @@ import { useAuthContext } from "../../context/AuthContext";
 
 const ChatContainer = () => {
   const { selected, setSelected } = useConversation();
+  const { authUser } = useAuthContext();
   const { deleteGroup } = useDeleteGroup();
 
   useEffect(() => {
@@ -22,24 +23,31 @@ const ChatContainer = () => {
         <NoChatSelected />
       ) : (
         <>
-          <div className="bg-slate-200 bg-opacity-50 pl-4 pr-2 py-2 mb-2 flex justify-between items-center">
+          <div className="bg-opacity-50 pl-4 pr-2 py-2 mb-2 flex justify-between items-center">
             <div>
-              <span className="label-text text-gray-900">To:</span>{" "}
-              <span className="text-gray-900 font-bold">
-                {selected.fullName || selected.groupName}
+              <span className="label-text text-white">To:</span>{" "}
+              <span className="text-white font-bold">
+                {selected.isGroup
+                  ? selected.groupName
+                  : selected.participants.filter(
+                      (p) => p._id.toString() != authUser._id.toString()
+                    )[0].fullName}
               </span>
             </div>
-            {selected.isGroup && (
-              <div
-                onClick={() => {
-                  setSelected();
-                  deleteGroup(selected._id);
-                }}
-                className="btn btn-sm btn-ghost rounded-full"
-              >
-                <MdOutlineDeleteOutline className="text-xl text-center" />
-              </div>
-            )}
+            {selected.isGroup &&
+              selected.admin?.toString() == authUser._id.toString() && (
+                <div
+                  onClick={() => {
+                    if (confirm("Are you sure you want to delete this group")) {
+                      setSelected();
+                      deleteGroup(selected._id);
+                    }
+                  }}
+                  className="btn btn-sm btn-ghost rounded-full text-black hover:text-white bg-slate-50 hover:bg-red-500 bg-opacity-70"
+                >
+                  <MdOutlineDeleteOutline className="text-lg" />
+                </div>
+              )}
           </div>
 
           <Chat isGroup={selected.isGroup} />

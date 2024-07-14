@@ -29,6 +29,20 @@ export const createChatGroup = async (req, res) => {
     await newGroup.save();
     if (!newGroup) throw new Error("Could not create a new group");
 
+    const otherUsers = newGroup.participants.filter(
+      (p) => p._id.toString() != loggedInUser._id.toString()
+    );
+    console.log("participants", otherUsers);
+
+    if (Array.isArray(otherUsers) && otherUsers.length > 0)
+      for (let user of otherUsers) {
+        let receiverSocketId = getReceiverSocketId(user._id);
+        console.log(receiverSocketId);
+        if (receiverSocketId) {
+          io.to(receiverSocketId).emit("newGroup", newGroup);
+        }
+      }
+
     res.status(200).json(newGroup);
   } catch (error) {
     console.log("Error in createGroup Controller:", error.message);
