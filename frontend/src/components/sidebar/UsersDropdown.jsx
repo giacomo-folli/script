@@ -2,7 +2,6 @@ import { useState } from "react";
 import { FaPlus } from "react-icons/fa6";
 import useAddContact from "../../hooks/useAddContact";
 import useGetChats from "../../hooks/useGetChats";
-import { isPersonOrGroup } from "../../utils/isPersonOrGroup";
 import useCreateGroup from "../../hooks/useCreateGroup";
 
 const UsersDropdown = ({ users, loggedInUser, toggleDialog }) => {
@@ -73,7 +72,17 @@ const GroupDialog = ({ loggedInUser, toggleDialog }) => {
   const [participants, setParticipants] = useState([]);
   const { createGroup } = useCreateGroup();
   const { chats } = useGetChats();
-  const onlyChat = chats.filter((ct) => !ct.isGroup);
+  const onlyChat = chats
+    .filter((ct) => !ct.isGroup)
+    .map((c) => {
+      return {
+        ...c.participants.filter(
+          (p) => p._id.toString() != loggedInUser._id.toString()
+        )[0],
+      };
+    });
+
+  console.log(onlyChat);
 
   const handleCreateGroup = async (e) => {
     e.preventDefault();
@@ -112,18 +121,13 @@ const GroupDialog = ({ loggedInUser, toggleDialog }) => {
               <div className="flex items-center gap-2">
                 <div className="avatar">
                   <div className="w-12 rounded-full">
-                    <img
-                      src={isPersonOrGroup(chat, loggedInUser).profilePic}
-                      alt="user avatar"
-                    />
+                    <img src={chat.profilePic} alt="user avatar" />
                   </div>
                 </div>
 
                 <div className="flex flex-col flex-1">
                   <div className="flex gap-3 justify-between">
-                    <p className="font-bold text-gray-700">
-                      {isPersonOrGroup(chat, loggedInUser).fullName}
-                    </p>
+                    <p className="font-bold text-gray-700">{chat.fullName}</p>
                   </div>
                 </div>
               </div>
