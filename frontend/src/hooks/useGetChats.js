@@ -17,7 +17,6 @@ const useGetChats = () => {
           throw new Error(data.error);
         }
 
-        console.log(data)
         setChats(data.chats);
         setUnread(data.unread);
       } catch (error) {

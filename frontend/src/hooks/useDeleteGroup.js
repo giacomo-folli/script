@@ -12,8 +12,6 @@ const useDeleteGroup = () => {
       if (data.error) {
         throw new Error(data.error);
       }
-
-      console.log("GROUP DELETED");
     } catch (error) {
       toast.error(error.message);
     } finally {
