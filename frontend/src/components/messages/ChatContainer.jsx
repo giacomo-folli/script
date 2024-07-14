@@ -1,12 +1,15 @@
 import { useEffect } from "react";
 import Chat from "./Chat";
 import useConversation from "../../store/useCoversation";
+import useDeleteGroup from "../../hooks/useDeleteGroup";
 import ChatInput from "./ChatInput";
 import { TiMessages } from "react-icons/ti";
+import { MdOutlineDeleteOutline } from "react-icons/md";
 import { useAuthContext } from "../../context/AuthContext";
 
 const ChatContainer = () => {
   const { selected, setSelected } = useConversation();
+  const { deleteGroup } = useDeleteGroup();
 
   useEffect(() => {
     // cleanup func (unmounts)
@@ -19,9 +22,24 @@ const ChatContainer = () => {
         <NoChatSelected />
       ) : (
         <>
-          <div className="bg-slate-200 bg-opacity-50 px-4 py-2 mb-2">
-            <span className="label-text text-gray-900">To:</span>{" "}
-            <span className="text-gray-900 font-bold">{selected.fullName}</span>
+          <div className="bg-slate-200 bg-opacity-50 pl-4 pr-2 py-2 mb-2 flex justify-between items-center">
+            <div>
+              <span className="label-text text-gray-900">To:</span>{" "}
+              <span className="text-gray-900 font-bold">
+                {selected.fullName || selected.groupName}
+              </span>
+            </div>
+            {selected.isGroup && (
+              <div
+                onClick={() => {
+                  setSelected();
+                  deleteGroup(selected._id);
+                }}
+                className="btn btn-sm btn-ghost rounded-full"
+              >
+                <MdOutlineDeleteOutline className="text-xl text-center" />
+              </div>
+            )}
           </div>
 
           <Chat isGroup={selected.isGroup} />

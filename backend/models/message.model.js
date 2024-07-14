@@ -10,7 +10,7 @@ const messageSchema = new mongoose.Schema(
     chatId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Chat",
-      required: false,
+      required: true,
     },
     isFile: {
       type: Boolean,
@@ -19,7 +19,7 @@ const messageSchema = new mongoose.Schema(
     },
     type: {
       type: String,
-      required: false
+      required: false,
     },
     fileName: {
       type: String,

@@ -1,4 +1,5 @@
 import Chat from "../models/chat.model.js";
+import Message from "../models/message.model.js";
 import { getReceiverSocketId, io } from "../socket/socket.js";
 
 export const createChatGroup = async (req, res) => {
@@ -62,6 +63,27 @@ export const leaveChatGroup = async (req, res) => {
     res.status(200).json({ message: "ok" });
   } catch (error) {
     console.log("Error in leaveChatGroup Controller:", error.message);
+    res.status(500).json({ error: "internal server error" });
+  }
+};
+
+export const deleteGroup = async (req, res) => {
+  const loggedInUser = req.user;
+  const { id: chatGroupId } = req.params;
+
+  try {
+    const group = await Chat.findOne({ _id: chatGroupId });
+    if (!group) throw new Error("Could not find the group ");
+
+    if (group.admin.toString() != loggedInUser._id.toString())
+      throw new Error("You can't delete this group");
+
+    await Message.deleteMany({ chatId: group._id });
+    await Chat.findOneAndDelete({ _id: group._id });
+
+    res.status(200).json({ message: "ok" });
+  } catch (error) {
+    console.log("Error in deleteGroup Controller:", error.message);
     res.status(500).json({ error: "internal server error" });
   }
 };
