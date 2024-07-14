@@ -1,13 +1,17 @@
 import mongoose from "mongoose";
+import path from "path";
 import supertest from "supertest";
 import dropAllCollections from "./test-setup.js";
 import configServer from "../utils/configServer.js";
 
-const app = configServer();
+const __dirname = path.resolve();
+const app = configServer(__dirname);
 
 let lucaUserToken;
 let lucaChats, lucaAndAnnaChat;
 let luca, anna;
+let group;
+
 beforeAll(async () => {
   const url = process.env.MONGO_DB_URI;
   await mongoose.connect(url, {
@@ -94,10 +98,10 @@ describe("Automatic Tests", () => {
         .set("Cookie", `jwt=${lucaUserToken}`);
 
       expect(res.statusCode).toEqual(200);
-      expect(Array.isArray(res.body)).toBe(true);
-      expect(res.body.length).toBeGreaterThan(0);
+      expect(Array.isArray(res.body.chats)).toBe(true);
+      expect(res.body.chats.length).toBeGreaterThan(0);
 
-      lucaChats = res.body;
+      lucaChats = res.body.chats;
     });
   });
 
@@ -144,46 +148,28 @@ describe("Automatic Tests", () => {
   });
 
   describe("Group Routes", () => {
-    test("mock test", () => {
-      expect(1).toBe(1);
+    it("should create a new group", async () => {
+      const res = await supertest(app)
+        .post("/api/groups/create")
+        .set("Cookie", `jwt=${lucaUserToken}`)
+        .send({
+          participants: [anna._id],
+        });
+
+      expect(res.statusCode).toEqual(200);
+      expect(res.body).toHaveProperty("_id");
+      expect(res.body.participants.length).toBeGreaterThan(1);
+
+      group = res.body;
     });
 
-    // it("should create a new group", async () => {
-    //   const res = await supertest(app)
-    //     .post("/api/groups")
-    //     .set("Cookie", `jwt=${userToken}`)
-    //     .send({
-    //       name: "Test Group",
-    //       description: "A group created for testing purposes",
-    //     });
+    it("leave a group", async () => {
+      const res = await supertest(app)
+        .get(`/api/groups/leave/${group._id}`)
+        .set("Cookie", `jwt=${lucaUserToken}`);
 
-    //   expect(res.statusCode).toEqual(201);
-    //   expect(res.body).toHaveProperty("_id");
-    //   expect(res.body.name).toEqual("Test Group");
-    // });
-
-    // it("should add a user to a group", async () => {
-    //   const groupId = "groupId"; // Use an actual group ID from your database
-    //   const userId = "userId"; // Use an actual user ID from your database
-    //   const res = await supertest(app)
-    //     .post(`/api/groups/${groupId}/addUser`)
-    //     .set("Cookie", `jwt=${userToken}`)
-    //     .send({ userId });
-
-    //   expect(res.statusCode).toEqual(200);
-    //   expect(res.body).toHaveProperty(
-    //     "message",
-    //     "User added to group successfully"
-    //   );
-    // });
-
-    // it("should get a list of groups for a user", async () => {
-    //   const res = await supertest(app)
-    //     .get("/api/groups")
-    //     .set("Cookie", `jwt=${userToken}`);
-
-    //   expect(res.statusCode).toEqual(200);
-    //   expect(Array.isArray(res.body)).toBe(true);
-    // });
+      expect(res.statusCode).toEqual(200);
+      expect(res.body.message).toEqual("ok");
+    });
   });
 });

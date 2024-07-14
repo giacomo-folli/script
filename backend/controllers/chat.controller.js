@@ -52,8 +52,9 @@ export const leaveChatGroup = async (req, res) => {
 
     const checkParticipants = group.participants.length;
     group.participants = group.participants.filter(
-      (pr) => pr._id !== loggedInUser._id
+      (pr) => pr._id.toString() !== loggedInUser._id.toString()
     );
+
     await group.save();
     if (checkParticipants == group.participants.length)
       throw new Error("Could not leave the group");
