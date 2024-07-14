@@ -5,9 +5,8 @@ const useListenGroups = () => {
   const { socket } = useSocketContext();
 
   useEffect(() => {
-    socket?.on("newGroup", (newGroup) => {
-      console.log(newGroup);
-      confirm("You've been added to a new group");
+    socket?.on("newGroup", () => {
+      window.location.reload();
     });
 
     return () => socket?.off("newGroup");

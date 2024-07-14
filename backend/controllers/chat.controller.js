@@ -1,6 +1,6 @@
 import Chat from "../models/chat.model.js";
 import Message from "../models/message.model.js";
-import { getReceiverSocketId, io } from "../socket/socket.js";
+import { getReceiverSocketId, getUserSocketMap, io } from "../socket/socket.js";
 
 export const createChatGroup = async (req, res) => {
   try {
@@ -32,12 +32,10 @@ export const createChatGroup = async (req, res) => {
     const otherUsers = newGroup.participants.filter(
       (p) => p._id.toString() != loggedInUser._id.toString()
     );
-    console.log("participants", otherUsers);
 
     if (Array.isArray(otherUsers) && otherUsers.length > 0)
       for (let user of otherUsers) {
         let receiverSocketId = getReceiverSocketId(user._id);
-        console.log(receiverSocketId);
         if (receiverSocketId) {
           io.to(receiverSocketId).emit("newGroup", newGroup);
         }
