@@ -4,12 +4,18 @@ import { useAuthContext } from "../../context/AuthContext";
 import useConversation from "../../store/useCoversation";
 
 const Conversation = ({ conversation, lastIdx }) => {
-  const { selected, setSelected } = useConversation();
+  const { selected, setSelected, unread, setUnread } = useConversation();
   const isSelected = selected?._id === conversation._id;
   const { onlineUsers } = useSocketContext();
   const { authUser } = useAuthContext();
 
   const isOnline = onlineUsers.includes(conversation._id);
+
+  function resetUnreadCounter() {
+    const unreadMessages = unread;
+    unread[conversation._id] = 0;
+    setUnread(unreadMessages);
+  }
 
   return (
     <>
@@ -17,7 +23,10 @@ const Conversation = ({ conversation, lastIdx }) => {
         className={`flex gap-2 items-center hover:bg-sky-500 rounded p-2 py-1 cursor-pointer ${
           isSelected ? " bg-sky-500" : ""
         }`}
-        onClick={() => setSelected(conversation)}
+        onClick={() => {
+          setSelected(conversation);
+          resetUnreadCounter();
+        }}
       >
         <div className={`avatar ${isOnline ? " online" : ""}`}>
           <div className="w-12 rounded-full">
@@ -33,9 +42,11 @@ const Conversation = ({ conversation, lastIdx }) => {
             <p className="font-bold text-gray-200">
               {isPersonOrGroup(conversation, authUser).fullName}
             </p>
-            <div className="rounded-full flex items-center justify-center w-4 h-4 btn-circle bg-sky-500 bg-opacity-70">
-              <span className="text-xs">1</span>
-            </div>
+            {unread[conversation._id] != 0 && (
+              <div className="rounded-full flex items-center justify-center w-4 h-4 btn-circle bg-sky-500 bg-opacity-70">
+                <span className="text-xs">{unread[conversation._id]}</span>
+              </div>
+            )}
           </div>
         </div>
       </div>

@@ -3,6 +3,7 @@ import Conversation from "./Conversation";
 
 const Conversations = () => {
   const { loading, chats } = useGetChats();
+
   return (
     <div className="pb-2 flex flex-col overflow-auto">
       {chats.map((chat, idx) => (

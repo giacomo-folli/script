@@ -13,11 +13,18 @@ const useGetMessages = () => {
         const res = await fetch(`/api/messages/${selected._id}`);
         const data = await res.json();
         if (data.error) throw new Error(data.error);
+
         setMessages(data);
       } catch (error) {
         toast.error(error.message);
       } finally {
         setLoading(false);
+      }
+
+      try {
+        await fetch("/api/users/resetUnread/" + selected._id);
+      } catch (error) {
+        toast.error(error.message);
       }
     };
 

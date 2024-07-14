@@ -1,5 +1,6 @@
 import User from "../models/user.model.js";
 import Chat from "../models/chat.model.js";
+import Message from "../models/message.model.js";
 
 export const listUsers = async (req, res) => {
   try {
@@ -18,7 +19,7 @@ export const listUsers = async (req, res) => {
 export const listUserChats = async (req, res) => {
   try {
     const loggedInUser = req.user;
-    if(!loggedInUser) throw new Error("No user logged in")
+    if (!loggedInUser) throw new Error("No user logged in");
 
     // list of our contacts
     const users = [];
@@ -30,11 +31,48 @@ export const listUserChats = async (req, res) => {
     // search for existing chats with our contacts
     let chats = await Chat.find({
       participants: { $elemMatch: { $eq: loggedInUser._id } },
-    }).populate("participants");
+    })
+      .populate("participants")
+      .populate("messages");
 
-    res.status(200).json(chats);
+    let unread = {};
+    for (let chat of chats) {
+      unread[chat._id] = 0;
+
+      for (let message of chat.messages) {
+        if (!message.opened) unread[chat._id] += 1;
+      }
+    }
+
+    res.status(200).json({ chats, unread });
   } catch (error) {
     console.log("Error in listUserChats :", error.message);
+    res.status(500).json({ error: "internal server error" });
+  }
+};
+
+export const resetUnreadCounter = async (req, res) => {
+  try {
+    const loggedInUser = req.user;
+    const { id: chatId } = req.params;
+    if (!loggedInUser) throw new Error("No user logged in");
+
+    // search for existing chats with our contacts
+    const chat = await Chat.findOne({ _id: chatId });
+    if (!chat) throw new Error("Cannot find chat");
+
+    for (let m of chat.messages) {
+      const message = await Message.findOne({ _id: m._id });
+
+      if (message && !message.opened) {
+        message.opened = true;
+        await message.save();
+      }
+    }
+
+    res.status(200).json({ message: "ok" });
+  } catch (error) {
+    console.log("Error in resetUnreadCounter :", error.message);
     res.status(500).json({ error: "internal server error" });
   }
 };
