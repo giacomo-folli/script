@@ -9,7 +9,9 @@ const Conversation = ({ conversation, lastIdx }) => {
   const { onlineUsers } = useSocketContext();
   const { authUser } = useAuthContext();
 
-  const isOnline = onlineUsers.includes(conversation._id);
+  const entity = isPersonOrGroup(conversation, authUser);
+  let isOnline = false;
+  if (!entity.isGroup) isOnline = onlineUsers.includes(entity._id);
 
   function resetUnreadCounter() {
     const unreadMessages = unread;

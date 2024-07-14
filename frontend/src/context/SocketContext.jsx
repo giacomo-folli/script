@@ -15,11 +15,11 @@ export const SocketContextProvider = ({ children }) => {
 
   useEffect(() => {
     if (authUser) {
-      // const socket = io("http://localhost:5000/", {
-      const socket = io("https://react-chat-macm.onrender.com", {
+      const socket = io("http://localhost:5000/", {
+        // const socket = io("https://react-chat-macm.onrender.com", {
         query: {
-          userId: authUser._id
-        }
+          userId: authUser._id,
+        },
       });
 
       setSocket(socket);

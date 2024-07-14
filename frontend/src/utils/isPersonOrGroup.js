@@ -1,7 +1,7 @@
 /**
- * 
- * @param {Chat} conversation 
- * @param {User} authUser 
+ *
+ * @param {Chat} conversation
+ * @param {User} authUser
  * @returns parsed item with fields {fullName, profilePic}
  */
 export const isPersonOrGroup = (conversation, authUser) => {
@@ -9,6 +9,7 @@ export const isPersonOrGroup = (conversation, authUser) => {
     return {
       fullName: conversation.groupName || "",
       profilePic: conversation.groupImage || "",
+      isGroup: true,
     };
   else
     return conversation.participants.filter(
