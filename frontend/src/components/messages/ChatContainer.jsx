@@ -18,7 +18,7 @@ const ChatContainer = () => {
   }, [setSelected]);
 
   return (
-    <div className="md:min-w-[450px] flex flex-col">
+    <div className="w-full h-full flex flex-col">
       {!selected ? (
         <NoChatSelected />
       ) : (
