@@ -21,16 +21,11 @@ export const listUserChats = async (req, res) => {
     const loggedInUser = req.user;
     if (!loggedInUser) throw new Error("No user logged in");
 
-    // list of our contacts
-    // const users = [];
-    // for (let us of loggedInUser.contacts) {
-    //   let contact = await User.findOne({ _id: us }).select("-password");
-    //   if (contact) users.push(contact);
-    // }
-
     // search for existing chats with our contacts
-    let chats = await Chat.find()
-      .populate("participants", "-password")    
+    let chats = await Chat.find({
+      participants: { $elemMatch: { $eq: loggedInUser._id } },
+    })
+      .populate("participants", "-password")
       .populate("messages");
 
     let unread = {};
