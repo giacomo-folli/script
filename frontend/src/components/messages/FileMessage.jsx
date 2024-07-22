@@ -8,7 +8,64 @@ const FileMessage = ({
   isGroup,
   fromMe,
 }) => {
-  return message.type.split("/")[0] == "image" ? (
+  const messageType = message.type;
+  console.log(messageType);
+  return messageType == "audio/mpeg" ? (
+    <AudioFile
+      message={message}
+      isGroup={isGroup}
+      fromMe={fromMe}
+      chatClassName={chatClassName}
+    />
+  ) : (
+    <ImageOrPDFFile
+      message={message}
+      isGroup={isGroup}
+      fromMe={fromMe}
+      chatClassName={chatClassName}
+      bubbleBgColor={bubbleBgColor}
+    />
+  );
+};
+
+const AudioFile = ({ message, isGroup, fromMe, chatClassName }) => {
+  return (
+    <div
+      className={
+        "flex gap-3 items-center py-2 " +
+        (chatClassName == "chat-end" ? "flex-row-reverse" : "")
+      }
+    >
+      <div className="chat-image avatar">
+        <div className="w-10 rounded-full">
+          <img src={message.senderId.profilePic} alt="user avatar" />
+        </div>
+      </div>
+      <div className="rounded-lg w-full max-w-40">
+        <audio controls>
+          <source
+            src={"http://localhost:5000/api/upload/" + message.fileName}
+          />
+        </audio>
+        <div className="chat-footer opacity-50 text-xs text-right mt-0.5 gap-1 items-center">
+          {extractTime(message.createdAt)}
+          <span className="ml-auto capitalize">
+            {isGroup && !fromMe ? message.senderId.fullName : ""}
+          </span>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const ImageOrPDFFile = ({
+  message,
+  isGroup,
+  fromMe,
+  chatClassName,
+  bubbleBgColor,
+}) => {
+  return (
     <div className={`chat ${chatClassName}`}>
       <div className="chat-image avatar">
         <div className="w-10 rounded-full">
@@ -44,32 +101,6 @@ const FileMessage = ({
         <span className="capitalize">
           {isGroup && !fromMe ? message.senderId.fullName : ""}
         </span>
-      </div>
-    </div>
-  ) : (
-    <div
-      className={
-        "flex gap-3 items-center py-2 " +
-        (chatClassName == "chat-end" ? "flex-row-reverse" : "")
-      }
-    >
-      <div className="chat-image avatar">
-        <div className="w-10 rounded-full">
-          <img src={message.senderId.profilePic} alt="user avatar" />
-        </div>
-      </div>
-      <div className="rounded-lg w-full max-w-40">
-        <audio controls>
-          <source
-            src={"http://localhost:5000/api/upload/" + message.fileName}
-          />
-        </audio>
-        <div className="chat-footer opacity-50 text-xs text-right mt-0.5 gap-1 items-center">
-          {extractTime(message.createdAt)}
-          <span className="ml-auto capitalize">
-            {isGroup && !fromMe ? message.senderId.fullName : ""}
-          </span>
-        </div>
       </div>
     </div>
   );

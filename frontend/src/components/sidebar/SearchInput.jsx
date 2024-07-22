@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { IoSearchSharp } from "react-icons/io5";
 import { FaPlus } from "react-icons/fa6";
 import { useAuthContext } from "../../context/AuthContext";
 import useGetUsers from "../../hooks/useGetUsers";
@@ -39,21 +38,6 @@ const SearchInput = ({ dialogOpen, setDialogOpen }) => {
   return (
     <>
       <form className="w-full flex items-center gap-2" onSubmit={handleSubmit}>
-        <div className="w-full hidden lg:flex lg:justify-between">
-          <input
-            type="text"
-            placeholder="Search..."
-            className="flex-grow bg-slate-500 bg-opacity-5 focus:bg-transparent input input-ghost border-slate-200 text-black"
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-          />
-          <button
-            type="submit"
-            className="btn btn-circle btn-ghost bg-transparent text-white"
-          >
-            <IoSearchSharp className="w-5 h-5 outline-none" />
-          </button>
-        </div>
         <button
           type="button"
           onClick={handleListUsers}
